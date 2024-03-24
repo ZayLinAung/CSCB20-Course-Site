@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
 app = Flask(__name__)
@@ -18,6 +17,10 @@ conn.execute(
 
 @app.route('/')
 def hello():
+    return '<h1>Hello, World!</h1>'
+
+@app.route('/addData')
+def addData():
     
     con = sqlite3.connect("database.db")
     cur = con.cursor()
@@ -27,6 +30,8 @@ def hello():
     con.commit()
 
     return '<h1>Hello, World!</h1>'
+
+
 
 
 if __name__ == "__main__":
