@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt
 from views.auth import auth_bp
-
+from views.instructors import instructor_bp
 app = Flask(__name__)
 
 bcrypt=Bcrypt(app)
@@ -20,6 +20,7 @@ def home():
     return render_template('index.html')
 
 app.register_blueprint(auth_bp, url_prefix = '/auth')
+app.register_blueprint(instructor_bp, url_prefix = '/instructor');
 
 if __name__ == "__main__":
   app.run()
