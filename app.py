@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request
 import sqlite3
+
+from flask_sqlalchemy import SQLAlchemy
 from views.auth import auth_bp
 
 app = Flask(__name__)
+
+db = SQLAlchemy(app)
 conn = sqlite3.connect("database.db")
 
 conn.execute(
