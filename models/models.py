@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 
 
-class Student(db.model):
+class Student(db.Model):
     __tablename = 'student'
     id=db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=False, nullable=False)
@@ -12,7 +12,7 @@ class Student(db.model):
     password = db.Column(db.String(25), unique=False, nullable=False)
 
 
-class Instructor(db.model):
+class Instructor(db.Model):
     __tablename = 'instructor'
     id=db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=False, nullable=False)
@@ -20,14 +20,14 @@ class Instructor(db.model):
     password = db.Column(db.String(25), unique=False, nullable=False)
 
 
-class Assignment(db.model):
+class Assignment(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), unique=False, nullable=False)
     content = db.Column(db.String(2000), unique=False, nullable=False)
     total=db.Column(db.Integer, unique = False, nullable=False)
 
 
-class Grade(db.model):
+class Grade(db.Model):
     id=db.Column(db.Integer, primary_key=True)
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)

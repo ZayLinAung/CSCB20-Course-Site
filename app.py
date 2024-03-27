@@ -2,16 +2,16 @@ from flask import Flask, render_template, request, flash, redirect, url_for, ses
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from flask_bcrypt import Bcrypt
-import models
+from views.auth import auth_bp
 
 app = Flask(__name__)
 
 bcrypt=Bcrypt(app)
 
 app.config['SECRET_KEY']='8a0f946f1471e113e528d927220ad977ed8b2cce63303beff10c8cb4a15e1a99'
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///notes.db'
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///database.db'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes = 10)
-db = SQLAlchemy(app)
+
 
 
 @app.route('/')

@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session, Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
-from flask_bcrypt import Bcrypt
-import models
+from flask_bcrypt import bcrypt
+from models.models import db
 
 auth_bp = Blueprint('auth', __name__)
 
