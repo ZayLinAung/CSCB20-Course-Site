@@ -52,7 +52,7 @@ def logout():
     return redirect(url_for('home'))
 
 
-# def add_users(reg_details):
-#     user = Person(username = reg_details[0], email = reg_details[1], password = reg_details[2])
-#     db.session.add(user)
-#     db.session.commit()
+def add_users(reg_details):
+    user = Person(username = reg_details[0], email = reg_details[1], password = reg_details[2])
+    db.session.add(user)
+    db.session.commit()

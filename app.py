@@ -15,8 +15,9 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes = 10)
 
 
 @app.route('/')
-def hello():
-    return '<h1>Hello, World!</h1>'
+@app.route('/home')
+def home():
+    return render_template('index.html')
 
 app.register_blueprint(auth_bp, url_prefix = '/auth')
 
