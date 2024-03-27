@@ -1,24 +1,18 @@
-from flask import Flask, render_template, request
-import sqlite3
-
+from flask import Flask, render_template, request, flash, redirect, url_for, session, Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
-from views.auth import auth_bp
+from datetime import datetime, timedelta
+from flask_bcrypt import Bcrypt
+import models
 
 app = Flask(__name__)
 
-db = SQLAlchemy(app)
-conn = sqlite3.connect("database.db")
+bcrypt=Bcrypt(app)
 
-conn.execute(
-    """
-    CREATE TABLE IF NOT EXISTS User 
-    (
-        id INTEGER PRIMARY KEY,
-        username TEXT, 
-        password TEXT
-    )
-    """
-)
+app.config['SECRET_KEY']='8a0f946f1471e113e528d927220ad977ed8b2cce63303beff10c8cb4a15e1a99'
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///notes.db'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes = 10)
+db = SQLAlchemy(app)
+
 
 @app.route('/')
 def hello():
