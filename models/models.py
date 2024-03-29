@@ -10,14 +10,13 @@ class Student(db.Model):
     username = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(25), unique=False, nullable=False)
-    grades_list = db.relationship('Grade', lazy='select',
-        backref=db.backref('student', lazy='joined'))
+    # grades_list = db.relationship('Grade', lazy='select',
+    #     backref=db.backref('student', lazy='joined'))
     
-    def __init__(self, student_id, username, email, password):
-        self.student_id = student_id
-        self.username = username
-        self.email = email
-        self.password = password
+
+    
+    def __repr__(self):
+        return f"Student('{self.username}', '{self.email}')"
 
 
 class Instructor(db.Model):
@@ -36,10 +35,10 @@ class Assignment(db.Model):
 
 
 class Grade(db.Model):
-    __tablename__ = 'grade'
+    __tablename__ = 'Grade'
     id=db.Column(db.Integer, primary_key=True)
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'), nullable=False)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('Student.id'), nullable=False)
     result=db.Column(db.Integer, unique = False, nullable=False)
 
 

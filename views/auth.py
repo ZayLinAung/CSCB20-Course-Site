@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session, Blueprint, current_app
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
-from flask_bcrypt import bcrypt
-from models.models import *
+from flask_bcrypt import Bcrypt
+
+from models.models import db, SQLAlchemy, Student, Instructor, Grade
+
+bcrypt = Bcrypt()
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -13,7 +16,7 @@ def register():
     else:
         user_name = request.form['Username']
         email = request.form['Email']
-        hashed_password=bcrypt.generate_password_hash(request.form['Password']).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(request.form['Password']).decode('utf-8')
         userType = request.form['userType']
         reg_details =(user_name,
                       email,
@@ -64,9 +67,10 @@ def logout():
 
 
 def add_users(reg_details):
-    if reg_details[3] == 'Student':
+    if reg_details[3] == 'student':
         user = Student(username = reg_details[0], email = reg_details[1], password = reg_details[2])
         db.session.add(user)
+        print("Added User!");
         db.session.commit()
     else:
         user = Instructor(username = reg_details[0], email = reg_details[1], password = reg_details[2])
