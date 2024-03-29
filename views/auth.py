@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, url_for, ses
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from flask_bcrypt import bcrypt
-from models.models import db
+from models.models import *
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -14,14 +14,13 @@ def register():
         user_name = request.form['Username']
         email = request.form['Email']
         hashed_password=bcrypt.generate_password_hash(request.form['Password']).decode('utf-8')
-        userType = request.form['Type']
+        userType = request.form['userType']
         reg_details =(user_name,
                       email,
                       hashed_password, userType)
-        # add_users(reg_details)
+        add_users(reg_details)
         flash('registration successful! Please login now:')
         return redirect(url_for('login'))
-#####START ADDED BY SHAWN
 
 @auth_bp.route('/registerinstructor', methods = ['GET', 'POST'])
 def register_instructor():    
@@ -65,6 +64,11 @@ def logout():
 
 
 def add_users(reg_details):
-    user = Person(username = reg_details[0], email = reg_details[1], password = reg_details[2])
-    db.session.add(user)
-    db.session.commit()
+    if reg_details[3] == 'Student':
+        user = Student(username = reg_details[0], email = reg_details[1], password = reg_details[2])
+        db.session.add(user)
+        db.session.commit()
+    else:
+        user = Instructor(username = reg_details[0], email = reg_details[1], password = reg_details[2])
+        db.session.add(user)
+        db.session.commit()
