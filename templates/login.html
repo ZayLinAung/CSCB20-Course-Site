@@ -7,34 +7,22 @@
   <form id="registerForm" action="http://127.0.0.1:5000/auth/login" method = "post">
     <h2 style="text-align: center;">Login</h2>
     <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+      <label for="name">Username:</label>
+      <input type="text" id="Username" name="Username" required />
     </div>
     <div class="form-group">
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required />
+      <input type="email" id="Email" name="Email" required />
     </div>
     <div class="form-group">
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required />
-    </div>
-    <div class="form-group">
-      <label for="password">Confirm Password:</label>
-      <input type="password" id="password" name="password" required />
-    </div>
-    <div class="custom-select">
-      <label for="userType">Choose user type:</label>
-      <select id="userType" name="userType">
-        <option value="student">Student</option>
-        <option value="instructor">Instructor</option>
-        </select
-      ><br /><br />
+      <input type="password" id="Password" name="Password" required />
     </div>
     <div class="form-group">
       <button type="submit">Register</button>
     </div>
     <div class="form-group">
-      <div class="login-link">Already have an account? <a href = "http://127.0.0.1:5000/auth/login">Log In</a></div>
+      <div class="login-link">Don't have an account yet? <a href = "http://127.0.0.1:5000/auth/register">Register</a></div>
     </div>
   </form>
 </div>
