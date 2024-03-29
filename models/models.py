@@ -5,16 +5,23 @@ db = SQLAlchemy()
 
 
 class Student(db.Model):
-    __tablename = 'student'
+    __tablename__ = 'Student'
     id=db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(25), unique=False, nullable=False)
     grades_list = db.relationship('Grade', lazy='select',
         backref=db.backref('student', lazy='joined'))
+    
+    def __init__(self, student_id, username, email, password):
+        self.student_id = student_id
+        self.username = username
+        self.email = email
+        self.password = password
+
 
 class Instructor(db.Model):
-    __tablename = 'instructor'
+    __tablename__ = 'Instructor'
     id=db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -29,6 +36,7 @@ class Assignment(db.Model):
 
 
 class Grade(db.Model):
+    __tablename__ = 'grade'
     id=db.Column(db.Integer, primary_key=True)
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)

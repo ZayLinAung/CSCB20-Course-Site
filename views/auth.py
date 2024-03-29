@@ -21,7 +21,19 @@ def register():
         # add_users(reg_details)
         flash('registration successful! Please login now:')
         return redirect(url_for('login'))
-    
+#####START ADDED BY SHAWN
+
+@auth_bp.route('/registerinstructor', methods = ['GET', 'POST'])
+def register_instructor():    
+    if request.method == 'GET':
+        return render_template('register.html');
+    else:
+        username = request.form['Username']
+        password = request.form['Password']
+        instructor = instructor.query.filter_by(username = username).first()
+
+
+####END ADDED BY SHAWN
 @auth_bp.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'GET':
