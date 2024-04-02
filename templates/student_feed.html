@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<body>
+
+    <h1>Hi</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Assignment Title</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in assignments_query %}
+            <tr>
+                <td>{{ grade.assignment.title }}</td>
+                <td>{{ grade.result }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+{% endblock content %}

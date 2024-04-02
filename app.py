@@ -28,24 +28,26 @@ class Person(db.Model):
 
 
 class Assignment(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
+    __tablename__ = 'Assignment'
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), unique=False, nullable=False)
     content = db.Column(db.String(2000), unique=False, nullable=False)
-    total=db.Column(db.Integer, unique = False, nullable=False)
+    total = db.Column(db.Integer, unique=False, nullable=False)
+    grades = db.relationship('Grade', backref='assignment', lazy=True)
 
 
 class Grade(db.Model):
     __tablename__ = 'Grade'
-    id=db.Column(db.Integer, primary_key=True)
-    assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'), nullable=False)
-    student_id = db.Column(db.Integer, db.ForeignKey('Student.id'), nullable=False)
-    result=db.Column(db.Integer, unique = False, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    assignment_id = db.Column(db.Integer, db.ForeignKey('Assignment.id'), nullable=False)
+    person_id = db.Column(db.Integer, db.ForeignKey('Person.id'), nullable=False)
+    result = db.Column(db.Integer, unique=False, nullable=False)
 
 
-class regrade_request(db.Model):
+class Regrade_request(db.Model):
     id=db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'), nullable=False)
+    person_id = db.Column(db.Integer, db.ForeignKey('Person.id'), nullable=False)
+    assignment_id = db.Column(db.Integer, db.ForeignKey('Assignment.id'), nullable=False)
     title = db.Column(db.String(200), unique=False, nullable=False)
     content = db.Column(db.String(2000), unique=False, nullable=False)
     approved = db.Column(db.Boolean, default = False)
@@ -100,12 +102,19 @@ def login():
             )
             session['name']=username
             session.permanent=True
+            session['person_id'] = person.id
             return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
     session.pop('name', default = None)
     return redirect(url_for('home'))
+
+
+@app.route('/assignments')
+def assignments():
+    student_assignments = getAssignments(student_id=session['person_id'])
+    return render_template('student_feed.html', assignments_query = student_assignments)
 
 
 def add_users(reg_details):
@@ -136,9 +145,12 @@ def home():
 # def feed():
 #     return render_template("instructor_feed.html")
 
-@app.route('/grades/<student>', methods = ['GET'])
-def grades(student):
-    return
+
+#Helper function to get the all the grades belonging to a specific student.
+def getAssignments(student_id):
+    assignments = Grade.query.filter_by(person_id = student_id)
+    return assignments
+
 
 if __name__ == "__main__":
   app.run(debug=True)
