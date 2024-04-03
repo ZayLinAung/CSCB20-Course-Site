@@ -72,3 +72,8 @@ select {
     text-align: center;
     font-size: 1.12rem;;
   }
+
+  .flash{
+    background-color: rgb(4, 245, 20);
+    height: 30px;
+  }

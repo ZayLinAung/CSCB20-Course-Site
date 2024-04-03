@@ -3,9 +3,20 @@
   rel="stylesheet"
   href="{{ url_for('static', filename='css/register.css') }}"
 />
+
+{% with messages = get_flashed_messages(with_categories = True) %}
+    {% if messages %}
+    <div class = "flash">
+        {% for category, message in messages %}
+        <strong>{{ category }}</strong> - {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+  {% endwith %}
+
 <div class="form-container">
-  <form id="registerForm" action="http://127.0.0.1:5000/login" method = "post">
-    <h2 style="text-align: center;">Login</h2>
+  <form id="registerForm" action="http://127.0.0.1:5000/login" method="post">
+    <h2 style="text-align: center">Login</h2>
     <div class="form-group">
       <label for="name">Username:</label>
       <input type="text" id="Username" name="Username" required />
@@ -22,9 +33,12 @@
       <button type="submit">Register</button>
     </div>
     <div class="form-group">
-      <div class="login-link">Don't have an account yet? <a href = "http://127.0.0.1:5000/register">Register</a></div>
+      <div class="login-link">
+        Don't have an account yet?
+        <a href="http://127.0.0.1:5000/register">Register</a>
+      </div>
     </div>
   </form>
 </div>
-<script src="script.js"></script>
+
 {% endblock content %}

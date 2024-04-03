@@ -70,16 +70,6 @@ def register():
         return redirect(url_for('login'))
 
 
-@app.route('/registerinstructor', methods = ['GET', 'POST'])
-def register_instructor():    
-    if request.method == 'GET':
-        return render_template('register.html');
-    else:
-        username = request.form['Username']
-        password = request.form['Password']
-        instructor = instructor.query.filter_by(username = username).first()
-
-
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -103,6 +93,7 @@ def login():
             session['name']=username
             session.permanent=True
             session['person_id'] = person.id
+            session['userType'] = person.userType
             return redirect(url_for('home'))
 
 @app.route('/logout')
@@ -111,10 +102,15 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route('/assignments')
-def assignments():
+@app.route('/assignments/student')
+def assignments_student():
     student_assignments = getAssignments(student_id=session['person_id'])
     return render_template('student_feed.html', assignments_query = student_assignments)
+
+
+@app.route('/assignments/instructor')
+def assignments_instructor():
+    return render_template('assignment.html')
 
 
 def add_users(reg_details):
