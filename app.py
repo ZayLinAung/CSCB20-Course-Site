@@ -149,18 +149,20 @@ def home():
 
 #endpoint to create a regrade request for the user in session with 
 #specified assignment_id
-@app.route('/regrade/<assignment_id>', methods=['GET, POST'])
+@app.route('/regrade/<assignment_id>', methods=['GET', 'POST'])
 def requestRegrade(assignment_id):
     if request.method == 'GET':
-        return render_template('regradeRequest.html')
+        return render_template('regradeRequest.html', assignment_id = assignment_id)
     if request.method == 'POST':
+        print("PRINTED OBJECT WOOHOO")
         regradeObj = Regrade_request(person_id = session['person_id'], assignment_id = assignment_id, 
                                     title= request.form['title'], content = request.form['content'],
                                     approved = False )
         #create a new regrade request 
+        print("PRINTED OBJECT WOOHOO")
         db.session.add(regradeObj)
         db.session.commit()
-        return render_template('regradeRequest.html', assignment_id = regradeObj.assignment_id)
+        return render_template('regradeRequest.html', assignment_id = assignment_id)
 
 
 #Helper function to get the all the grades belonging to a specific student.
