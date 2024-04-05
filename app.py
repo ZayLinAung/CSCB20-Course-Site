@@ -45,6 +45,7 @@ class Grade(db.Model):
 
 
 class Regrade_request(db.Model):
+    __tablename__ = 'Regrade'
     id=db.Column(db.Integer, primary_key=True)
     person_id = db.Column(db.Integer, db.ForeignKey('Person.id'), nullable=False)
     assignment_id = db.Column(db.Integer, db.ForeignKey('Assignment.id'), nullable=False)
@@ -142,6 +143,24 @@ def add_users(reg_details):
 @app.route('/home')
 def home():
     return render_template('index.html')
+
+
+
+
+#endpoint to create a regrade request for the user in session with 
+#specified assignment_id
+@app.route('/regrade/<assignment_id>', methods=['GET, POST'])
+def requestRegrade(assignment_id):
+    if request.method == 'GET':
+        return render_template('regradeRequest.html')
+    if request.method == 'POST':
+        regradeObj = Regrade_request(person_id = session['person_id'], assignment_id = assignment_id, 
+                                    title= request.form['title'], content = request.form['content'],
+                                    approved = False )
+        #create a new regrade request 
+        db.session.add(regradeObj)
+        db.session.commit()
+        return render_template('regradeRequest.html', assignment_id = regradeObj.assignment_id)
 
 
 #Helper function to get the all the grades belonging to a specific student.
