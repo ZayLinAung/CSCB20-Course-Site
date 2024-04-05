@@ -36,10 +36,8 @@
 
           {% if session.userType == 'Instructor'%}
           <li><a href="{{url_for('assignments_instructor')}}">Assignments</a></li>
-          <li><a href="{{url_for('feedback_instructor')}}">Feedback</a></li>
           {% else %}
           <li><a href="{{url_for('assignments_student')}}">Assignments</a></li>
-          <li><a href="{{url_for('feedback_student')}}">Feedback</a></li>
           {% endif %}
 
           <li><a href="{{url_for('logout')}}">Log Out</a></li>

@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<body>
+    <h1>A1 Grades</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Grade</th>
+                <th>Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade, name in grades_names %}
+            <tr>
+                <td>{{ name }}</td>
+                <td>{{ grade.result }} / {{ total }}</td>
+                <td>
+                    <form action="{{ url_for('update_grade_A1') }}" method="post">
+                        <input type="hidden" name="grade_id" value="{{ grade.id }}">
+                        <input type="number" name="new_grade" min="0" max="{{ total }}" required>
+                        <button type="submit" class="button">Change</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock content %}
