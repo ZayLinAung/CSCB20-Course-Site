@@ -69,14 +69,27 @@ def register():
         return render_template('register.html')
     else:
         user_name = request.form['Username']
+        person = Person.query.filter_by(username = user_name).first()
+        if person:
+            flash('Username Already Exist. Try again!', 'Error')
+            return render_template('register.html')
+
         email = request.form['Email']
+        person = Person.query.filter_by(email = email).first()
+        if person:
+            flash('Email Already Exist. Try again!', 'Error')
+            return render_template('register.html')
+        if request.form['password'] != request.form['confirmPassword']:
+            flash('Please confirm your password matches. Try again!', 'Error')
+            return render_template('register.html')
+        
         hashed_password = bcrypt.generate_password_hash(request.form['Password']).decode('utf-8')
         userType = request.form['userType']
         reg_details =(user_name,
                       email,
                       hashed_password, userType)
         add_users(reg_details)
-        flash('registration successful! Please login now:')
+        flash('Registration successful! Please login now:')
         return redirect(url_for('login'))
 
 
