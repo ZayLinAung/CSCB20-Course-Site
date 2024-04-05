@@ -23,7 +23,7 @@ body {
 .container {
   width: 80%;
   margin: 0 auto; /* Center the container */
-  
+  display: flex;
 }
 .container_nav{
 width: 80%;
@@ -165,10 +165,9 @@ td a:hover {
   color: #fff;
   padding: 10px 0;
   text-align: center;
-  position: fixed;
   bottom: 0;
+  margin-bottom: 0;
   width: 100%;
-  
 }
 
 .footer p {
@@ -220,4 +219,26 @@ color: #d9d9d9;
 
 .text-with-padding {
 padding: 5%; 
+}
+
+
+
+form {
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+select,
+input[type="text"],
+input[type="email"],
+textarea {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
