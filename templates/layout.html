@@ -27,11 +27,11 @@
           {% if session.name %}
 
 
-          <li><a href="calendar.html">Calendar</a></li>
-          <li><a href="lectures.html">Lecture</a></li>
-          <li><a href="labs.html">Labs</a></li>
-          <li><a href="resources.html">Resources</a></li>
-          <li><a href="coursePage.html">Course Team</a></li>
+          <li><a href="{{url_for('calendar')}}">Calendar</a></li>
+          <li><a href="{{url_for('lectures')}}">Lecture</a></li>
+          <li><a href="{{url_for('labs')}}">Labs</a></li>
+          <li><a href="{{url_for('resources')}}">Resources</a></li>
+          <li><a href="{{url_for('courseTeam')}}">Course Team</a></li>
 
 
           {% if session.userType == 'Instructor'%}

@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/courseTeam.css') }}"
+/>
+
+<div id="fade-in-page" class="fade-in-page">
+    <main class="container">
+      <h1 style="text-align: center;">Meet Our Course Team</h1>
+      <div class="team-member">
+        <div class="member">
+          <img src = "{{ url_for('static', filename='images/Gawde, Purva.jpg') }}" alt="Team Member 1" />
+          <h2>Purva</h2>
+          <p>Instructor</p>
+          <p>Office Hours: Tuesday 12:00 - 1:00</p>
+          <p>Email: purva.gawde@utoronto.ca</p>
+        </div>
+        <div class="member">
+          <img src = "{{ url_for('static', filename='images/cat.jpg') }}" alt="Team Member 2" />
+          <h2>Joshua Concon</h2>
+          <p>Teaching Assistant</p>
+          <p>Office Hours: Wednesday 15:00 - 16:00</p>
+          <p>Email: purva.gawde@utoronto.ca</p>
+        </div>
+        <div class="member">
+          <img src = "{{ url_for('static', filename='images/cat.jpg') }}" alt="Team Member 2" />
+          <h2>Pourya Moghadam</h2>
+          <p>Teaching Assistant</p>
+          <p>Office Hours: Monday 11:00 - 12:00/ 13:00 - 14:00</p>
+          <p>Email: purva.gawde@utoronto.ca</p>
+        </div>
+        <div class="member">
+          <img src = "{{ url_for('static', filename='images/cat.jpg') }}" alt="Team Member 2" />
+          <h2>Danny Chen</h2>
+          <p>Teaching Assistant</p>
+          <p>Office Hours: Friday 12:00 - 13:00</p>
+          <p>Email: purva.gawde@utoronto.ca</p>
+        </div>
+        <div class="member">
+          <img src = "{{ url_for('static', filename='images/cat.jpg') }}" alt="Team Member 2" />
+          <h2>Nisha Rajendran</h2>
+          <p>Teaching Assistant</p>
+          <p>Office Hours: Wednesday 10:00 - 11:00</p>
+          <p>Email: purva.gawde@utoronto.ca</p>
+        </div>
+        <div class="member">
+          <img src = "{{ url_for('static', filename='images/cat.jpg') }}" alt="Team Member 2" />
+          <h2>Navinn Ravindaran</h2>
+          <p>Teaching Assistant</p>
+          <p>Office Hours: Friday 11:00 - 12:00</p>
+          <p>Email: purva.gawde@utoronto.ca</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+{% endblock content %}

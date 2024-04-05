@@ -159,6 +159,31 @@ def add_users(reg_details):
 def home():
     return render_template('index.html')
 
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
+
+
+@app.route('/labs')
+def labs():
+    return render_template('labs.html')
+
+
+@app.route('/resources')
+def resources():
+    return render_template('resources.html')
+
+
+@app.route('/lectures')
+def lectures():
+    return render_template('lecture.html')
+
+
+@app.route('/courseTeam')
+def courseTeam():
+    return render_template('courseTeam.html')
+
+
 
 #Helper function to get the all the grades belonging to a specific student.
 def getAssignments(student_id):
