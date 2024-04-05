@@ -111,6 +111,64 @@ def assignments_student():
 def assignments_instructor():
     return render_template('assignment.html')
 
+@app.route('/A1_grades/assignments/instructor/')
+def instructor_A1_grades():
+
+    # To add new grade into Grades db 
+    # grade = Grade(
+    #     assignment_id=1,
+    #     person_id=3,
+    #     result=60
+    # )
+    # db.session.add(grade)
+    # db.session.commit()
+
+    # To delete grades from Grade db by id 
+    # grade = Grade.query.get(7)
+    # db.session.delete(grade)
+    # db.session.commit()
+
+    assignment = Assignment.query.get(1)
+    total_A1 = assignment.total
+    all_grades = Grade.query.filter_by(assignment_id=1).all()
+    all_person_ids = [grade.person_id for grade in all_grades]
+    persons = Person.query.filter(Person.id.in_(all_person_ids)).all()
+    usernames = [person.username for person in persons]
+    grades_names = zip(all_grades, usernames)
+
+    return render_template('instructor_A1_grades.html', grades_names=grades_names, total=total_A1)
+
+@app.route('/A2_grades/assignments/instructor/')
+def instructor_A2_grades():
+
+    assignment = Assignment.query.get(2)
+    total_A2 = assignment.total
+    all_grades = Grade.query.filter_by(assignment_id=2).all()
+    all_person_ids = [grade.person_id for grade in all_grades]
+    persons = Person.query.filter(Person.id.in_(all_person_ids)).all()
+    usernames = [person.username for person in persons]
+    grades_names = zip(all_grades, usernames)
+
+    return render_template('instructor_A2_grades.html', grades_names=grades_names, total=total_A2)
+
+@app.route('/update_gradeA1', methods=['POST'])
+def update_grade_A1():
+    grade_id = request.form['grade_id']
+    new_grade = request.form['new_grade']
+    grade = Grade.query.get(grade_id) 
+    grade.result = new_grade
+    db.session.commit()
+    return redirect(url_for('instructor_A1_grades'))
+
+@app.route('/update_gradeA2', methods=['POST'])
+def update_grade_A2():
+    grade_id = request.form['grade_id']
+    new_grade = request.form['new_grade']
+    grade = Grade.query.get(grade_id) 
+    grade.result = new_grade
+    db.session.commit()
+    return redirect(url_for('instructor_A2_grades'))
+
 
 @app.route('/feedback/student', methods = ['GET', 'POST'])
 def feedback_student():
