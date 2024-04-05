@@ -52,6 +52,17 @@ class Regrade_request(db.Model):
     content = db.Column(db.String(2000), unique=False, nullable=False)
     approved = db.Column(db.Boolean, default = False)
 
+
+class Feedback(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    instructor_id = db.Column(db.Integer, db.ForeignKey('Person.id'), nullable=False)
+    f1 = db.Column(db.String(200), unique=False, nullable=True)
+    f2 = db.Column(db.String(200), unique=False, nullable=True)
+    f3 = db.Column(db.String(200), unique=False, nullable=True)
+    f4 = db.Column(db.String(200), unique=False, nullable=True)
+
+
+
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     if request.method=='GET':
@@ -119,17 +130,22 @@ def feedback_student():
         f2 = request.form['f2']
         f3 = request.form['f3']
         f4 = request.form['f4']
+        instructor_id = request.form['instructor']
         
-        
-        flash('Feedback successfully submitted! ')
-        return redirect(url_for('login'))
+        newFeedback = Feedback(instructor_id = instructor_id, f1 = f1, f2 = f2, f3 = f3, f4 = f4)
+        db.session.add(newFeedback)
+        db.session.commit()
+        flash('Feedback successfully submitted!')
+        return redirect(url_for('feedback_student'))
     else:
-        return render_template('feedbackStudent.html')
+        person = Person.query.filter_by(userType = 'Instructor').all()
+        return render_template('feedbackStudent.html', instructors = person)
 
 
 @app.route('/feedback/instructor')
 def feedback_instructor():
-    return render_template('feedbackInstructor.html')
+    feedbacks = Feedback.query.filter_by(instructor_id = session['person_id']).all()
+    return render_template('feedbackInstructor.html', feedbacks = feedbacks)
 
 
 def add_users(reg_details):
