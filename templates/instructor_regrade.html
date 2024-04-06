@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+    {% for regrade in all_regrades %}
+        
+    <div class="card-content">
+      
+      <h2>Assignment: {{regrade.assignment_id}}</h2>
+      <h3 style="color: red;">{{regrade.title}}</h3>
+      <p>{{regrade.content}}</p>
+      <a href="" class="button">Approve</a>
+    </div>
+  </div>
+    {% endfor %}
+
+  {% endblock content%}
