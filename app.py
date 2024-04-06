@@ -45,12 +45,14 @@ class Grade(db.Model):
 
 
 class Regrade_request(db.Model):
+    __tablename__ = 'Regrade'
     id=db.Column(db.Integer, primary_key=True)
     person_id = db.Column(db.Integer, db.ForeignKey('Person.id'), nullable=False)
     assignment_id = db.Column(db.Integer, db.ForeignKey('Assignment.id'), nullable=False)
     title = db.Column(db.String(200), unique=False, nullable=False)
     content = db.Column(db.String(2000), unique=False, nullable=False)
     approved = db.Column(db.Boolean, default = False)
+    
 
 
 class Feedback(db.Model):
@@ -85,6 +87,7 @@ def register():
         
         hashed_password = bcrypt.generate_password_hash(request.form['Password']).decode('utf-8')
         userType = request.form['userType']
+        print(type(userType))
         reg_details =(user_name,
                       email,
                       hashed_password, userType)
@@ -130,10 +133,85 @@ def assignments_student():
     student_assignments = getAssignments(student_id=session['person_id'])
     return render_template('student_feed.html', assignments_query = student_assignments)
 
+@app.route('/regrade/instructor')
+def regrade_instructor():
+    regradeQuery = getRegrade()
+    return render_template('instructor_regrade.html', all_regrades = regradeQuery)
 
 @app.route('/assignments/instructor')
 def assignments_instructor():
+   
     return render_template('assignment.html')
+
+@app.route('/A1_grades/assignments/instructor/')
+def instructor_A1_grades():
+
+    assignment = Assignment.query.get(1)
+    total_A1 = assignment.total
+    all_grades = Grade.query.filter_by(assignment_id=1).all()
+    all_person_ids = [grade.person_id for grade in all_grades]
+    persons = Person.query.filter(Person.id.in_(all_person_ids)).all()
+    usernames = [person.username for person in persons]
+    grades_names = zip(all_grades, usernames)
+
+    return render_template('instructor_A1_grades.html', grades_names=grades_names, total=total_A1)
+
+@app.route('/A2_grades/assignments/instructor/')
+def instructor_A2_grades():
+
+    
+    assignment = Assignment.query.get(2)
+    total_A2 = assignment.total
+    all_grades = Grade.query.filter_by(assignment_id=2).all()
+    all_person_ids = [grade.person_id for grade in all_grades]
+    persons = Person.query.filter(Person.id.in_(all_person_ids)).all()
+    usernames = [person.username for person in persons]
+    grades_names = zip(all_grades, usernames)
+
+    return render_template('instructor_A2_grades.html', grades_names=grades_names, total=total_A2)
+
+@app.route('/A3_grades/assignments/instructor/')
+def instructor_A3_grades():
+
+    assignment = Assignment.query.get(3)
+    total_A3 = assignment.total
+    all_grades = Grade.query.filter_by(assignment_id=3).all()
+    all_person_ids = [grade.person_id for grade in all_grades]
+    persons = Person.query.filter(Person.id.in_(all_person_ids)).all()
+    usernames = [person.username for person in persons]
+    grades_names = zip(all_grades, usernames)
+
+    return render_template('instructor_A3_grades.html', grades_names=grades_names, total=total_A3)
+
+@app.route('/update_gradeA1', methods=['POST'])
+def update_grade_A1():
+    grade_id = request.form['grade_id']
+    new_grade = request.form['new_grade']
+    grade = Grade.query.get(grade_id) 
+    grade.result = new_grade
+    db.session.commit()
+    return redirect(url_for('instructor_A1_grades'))
+
+@app.route('/update_gradeA2', methods=['POST'])
+def update_grade_A2():
+    grade_id = request.form['grade_id']
+    new_grade = request.form['new_grade']
+    grade = Grade.query.get(grade_id) 
+    grade.result = new_grade
+    db.session.commit()
+    return redirect(url_for('instructor_A2_grades'))
+
+@app.route('/update_gradeA3', methods=['POST'])
+def update_grade_A3():
+    grade_id = request.form['grade_id']
+    new_grade = request.form['new_grade']
+    grade = Grade.query.get(grade_id) 
+    grade.result = new_grade
+    db.session.commit()
+    return redirect(url_for('instructor_A3_grades'))
+
+
+
 
 
 @app.route('/feedback/student', methods = ['GET', 'POST'])
@@ -198,10 +276,35 @@ def courseTeam():
 
 
 
+
+#endpoint to create a regrade request for the user in session with 
+#specified assignment_id
+@app.route('/regrade/<assignment_id>', methods=['GET', 'POST'])
+def requestRegrade(assignment_id):
+    if request.method == 'GET':
+        return render_template('regradeRequest.html', assignment_id = assignment_id)
+    if request.method == 'POST':
+        print("PRINTED OBJECT WOOHOO")
+        AssignmentName = Assignment.query.filter_by(id=assignment_id).first().title
+        regradeObj = Regrade_request(person_id = session['person_id'], assignment_id = assignment_id, 
+                                    title= request.form['title'], content = request.form['content'],
+                                    approved = False)
+        #create a new regrade request 
+        print("PRINTED OBJECT WOOHOO")
+        db.session.add(regradeObj)
+        db.session.commit()
+        return render_template('regradeRequest.html', assignment_id = assignment_id)
+
+
 #Helper function to get the all the grades belonging to a specific student.
 def getAssignments(student_id):
     assignments = Grade.query.filter_by(person_id = student_id)
     return assignments
+
+
+def getRegrade():
+    all_regrades = Regrade_request.query.all()
+    return all_regrades
 
 
 if __name__ == "__main__":
