@@ -52,6 +52,7 @@ class Regrade_request(db.Model):
     title = db.Column(db.String(200), unique=False, nullable=False)
     content = db.Column(db.String(2000), unique=False, nullable=False)
     approved = db.Column(db.Boolean, default = False)
+    
 
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -107,6 +108,10 @@ def assignments_student():
     student_assignments = getAssignments(student_id=session['person_id'])
     return render_template('student_feed.html', assignments_query = student_assignments)
 
+@app.route('/regrade/instructor')
+def regrade_instructor():
+    regradeQuery = getRegrade()
+    return render_template('instructor_regrade.html', all_regrades = regradeQuery)
 
 @app.route('/assignments/instructor')
 def assignments_instructor():
@@ -155,9 +160,10 @@ def requestRegrade(assignment_id):
         return render_template('regradeRequest.html', assignment_id = assignment_id)
     if request.method == 'POST':
         print("PRINTED OBJECT WOOHOO")
+        AssignmentName = Assignment.query.filter_by(id=assignment_id).first().title
         regradeObj = Regrade_request(person_id = session['person_id'], assignment_id = assignment_id, 
                                     title= request.form['title'], content = request.form['content'],
-                                    approved = False )
+                                    approved = False)
         #create a new regrade request 
         print("PRINTED OBJECT WOOHOO")
         db.session.add(regradeObj)
@@ -169,6 +175,11 @@ def requestRegrade(assignment_id):
 def getAssignments(student_id):
     assignments = Grade.query.filter_by(person_id = student_id)
     return assignments
+
+
+def getRegrade():
+    all_regrades = Regrade_request.query.all()
+    return all_regrades
 
 
 if __name__ == "__main__":
