@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% block content %}
+
+<div id="fade-in-page" class="fade-in-page">
+    <main class="container">
+      <h1>Regrade Request {{assignment_id}}</h1>
+    <div class="card">
+      
+      <div class="card-content">
+          <img src="{{ url_for('static', filename='images/feedbackForm.gif') }}" alt="Example Image" style="width: 10%; height:20%;">
+            <form action="http://127.0.0.1:5000/regrade/{{assignment_id}}" method="post">
+            <label for="Title">Please specify the questions you would like to be regraded</label>
+            <textarea id="title" name="title" required></textarea>
+            <label for="Content">Provide explanation for the regrade</label>
+            <textarea id="content" name="content" required></textarea>
+
+            <button class="button" type="submit">Submit</button>
+        </form>
+      </div>
+      
+  </main>
+  </div>
+
+
+
+{% endblock content %}
