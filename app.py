@@ -81,7 +81,7 @@ def register():
         if person:
             flash('Email Already Exist. Try again!', 'Error')
             return render_template('register.html')
-        if request.form['password'] != request.form['confirmPassword']:
+        if request.form['Password'] != request.form['confirmPassword']:
             flash('Please confirm your password matches. Try again!', 'Error')
             return render_template('register.html')
         
