@@ -3,7 +3,7 @@
 {% block content %}
 <body>
 
-    <h1>Hi</h1>
+    <h1>Assignments</h1>
 
     <table>
         <thead>
@@ -18,9 +18,12 @@
                 <td>{{ grade.assignment.title }}</td>
                 <td>{{ grade.result }}</td>
                 <td>
-                    <a href="http://127.0.0.1:5000/regrade/{{grade.assignment_id}}">
-                       regrade 
-                    </a>
+                    <button class="button">
+                        <a href="http://127.0.0.1:5000/regrade/{{grade.assignment_id}}">
+                            regrade 
+                        </a>
+                    </button>
+                    
                     
                 </td>
             </tr>
