@@ -54,13 +54,37 @@ class Regrade_request(db.Model):
     approved = db.Column(db.Boolean, default = False)
     
 
+
+class Feedback(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    instructor_id = db.Column(db.Integer, db.ForeignKey('Person.id'), nullable=False)
+    f1 = db.Column(db.String(200), unique=False, nullable=True)
+    f2 = db.Column(db.String(200), unique=False, nullable=True)
+    f3 = db.Column(db.String(200), unique=False, nullable=True)
+    f4 = db.Column(db.String(200), unique=False, nullable=True)
+
+
+
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     if request.method=='GET':
         return render_template('register.html')
     else:
         user_name = request.form['Username']
+        person = Person.query.filter_by(username = user_name).first()
+        if person:
+            flash('Username Already Exist. Try again!', 'Error')
+            return render_template('register.html')
+
         email = request.form['Email']
+        person = Person.query.filter_by(email = email).first()
+        if person:
+            flash('Email Already Exist. Try again!', 'Error')
+            return render_template('register.html')
+        if request.form['Password'] != request.form['confirmPassword']:
+            flash('Please confirm your password matches. Try again!', 'Error')
+            return render_template('register.html')
+        
         hashed_password = bcrypt.generate_password_hash(request.form['Password']).decode('utf-8')
         userType = request.form['userType']
         print(type(userType))
@@ -68,7 +92,7 @@ def register():
                       email,
                       hashed_password, userType)
         add_users(reg_details)
-        flash('registration successful! Please login now:')
+        flash('Registration successful! Please login now:')
         return redirect(url_for('login'))
 
 
@@ -197,17 +221,22 @@ def feedback_student():
         f2 = request.form['f2']
         f3 = request.form['f3']
         f4 = request.form['f4']
+        instructor_id = request.form['instructor']
         
-        
-        flash('Feedback successfully submitted! ')
-        return redirect(url_for('login'))
+        newFeedback = Feedback(instructor_id = instructor_id, f1 = f1, f2 = f2, f3 = f3, f4 = f4)
+        db.session.add(newFeedback)
+        db.session.commit()
+        flash('Feedback successfully submitted!')
+        return redirect(url_for('feedback_student'))
     else:
-        return render_template('feedbackStudent.html')
+        person = Person.query.filter_by(userType = 'Instructor').all()
+        return render_template('feedbackStudent.html', instructors = person)
 
 
 @app.route('/feedback/instructor')
 def feedback_instructor():
-    return render_template('feedbackInstructor.html')
+    feedbacks = Feedback.query.filter_by(instructor_id = session['person_id']).all()
+    return render_template('feedbackInstructor.html', feedbacks = feedbacks)
 
 
 def add_users(reg_details):
@@ -220,6 +249,31 @@ def add_users(reg_details):
 @app.route('/home')
 def home():
     return render_template('index.html')
+
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
+
+
+@app.route('/labs')
+def labs():
+    return render_template('labs.html')
+
+
+@app.route('/resources')
+def resources():
+    return render_template('resources.html')
+
+
+@app.route('/lectures')
+def lectures():
+    return render_template('lecture.html')
+
+
+@app.route('/courseTeam')
+def courseTeam():
+    return render_template('courseTeam.html')
+
 
 
 

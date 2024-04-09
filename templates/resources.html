@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div id="fade-in-page" class="fade-in-page">
+    <main class="container">
+      <div class="card">
+        
+        <div class="card-content">
+          <img src="{{ url_for('static', filename='images/document.gif') }}" alt="Example Image" style="width:10dvw; height:20dvh;">
+          <h2>Extra Resources</h2>
+          <p>General topic related to SQL, HTML, CSS, JS , Python and </p>
+          <a href="#" class="button">Learn More</a>
+        </div>
+      </div>
+
+
+      <div class="card">
+        
+        <div class="card-content">
+          <img src="{{ url_for('static', filename='images/Piazza.png') }}" alt="Example Image" style="width:auto; height:50px;">
+          <h2>Piazza</h2>
+          <p>Check out the Piazza discussion forum for any course updates, concern and questions.</p>
+          <a href="https://piazza.com/class/lqy466htv8g5xb" class="button">Go to Piazza</a>
+        </div>
+      </div>
+    
+      <div class="card">
+        
+        <div class="card-content">
+          <img src="{{ url_for('static', filename='images/Markus.png') }}" alt="Example Image" style="width:auto; height:50px;">
+          <h2>Markus</h2>
+          <p>All the assignments evaluations will be posted in Markus.</p>
+          <a href="https://markus2.utsc.utoronto.ca/courses/20" class="button">Go to Markus</a>
+        </div>
+      </div>
+    </main>
+  </div>
+
+{% endblock content %}

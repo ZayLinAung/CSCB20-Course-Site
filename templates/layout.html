@@ -21,23 +21,29 @@
     <nav class="navbar">
       <div class="container_nav">
         <ul>
+          <li><img src = "{{ url_for('static', filename='images/UofT.jpg') }}" style="  width: 30px;
+            height: auto;" alt="UofT Logo" /></li>
           <div class="CSCB20">CSCB20</div>
+          
           <li><a href="{{url_for('home')}}">Home</a></li>
 
           {% if session.name %}
 
 
-          <li><a href="calendar.html">Calendar</a></li>
-          <li><a href="lectures.html">Lecture</a></li>
-          <li><a href="labs.html">Labs</a></li>
-          <li><a href="resources.html">Resources</a></li>
-          <li><a href="coursePage.html">Course Team</a></li>
+          <li><a href="{{url_for('calendar')}}">Calendar</a></li>
+          <li><a href="{{url_for('lectures')}}">Lecture</a></li>
+          <li><a href="{{url_for('labs')}}">Labs</a></li>
+          <li><a href="{{url_for('resources')}}">Resources</a></li>
+          <li><a href="{{url_for('courseTeam')}}">Course Team</a></li>
 
 
           {% if session.userType == 'Instructor'%}
           <li><a href="{{url_for('assignments_instructor')}}">Assignments</a></li>
+          <li><a href="{{url_for('feedback_instructor')}}">Feedback</a></li>
+          <li><a href="{{url_for('regrade_instructor')}}">Regrade</a></li>
           {% else %}
           <li><a href="{{url_for('assignments_student')}}">Assignments</a></li>
+          <li><a href="{{url_for('feedback_student')}}">Feedback</a></li>
           {% endif %}
 
           <li><a href="{{url_for('logout')}}">Log Out</a></li>

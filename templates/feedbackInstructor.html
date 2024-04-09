@@ -1,0 +1,74 @@
+{% extends "layout.html" %} {% block content %}
+
+<div id="fade-in-page" class="fade-in-page">
+  <main class="container">
+    <h1>Feedback</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Q1: What do you like about the instructor teaching?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in range(feedbacks | length) %}
+        <tr>
+          <td>{{feedbacks[i].f1}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Q2: What do you recommend the instructor to do to improve their
+            teaching??
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in range(feedbacks | length) %}
+        <tr>
+          <td>{{feedbacks[i].f2}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <table>
+      <thead>
+        <tr>
+          <th>Q3: What do you like about the labs?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in range(feedbacks | length) %}
+        <tr>
+          <td>{{feedbacks[i].f1}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>
+            Q4: What do you recommend the lab instructors to do to improve their
+            lab teaching?
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in range(feedbacks | length) %}
+        <tr>
+          <td>{{feedbacks[i].f4}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</div>
+
+{% endblock content %}
