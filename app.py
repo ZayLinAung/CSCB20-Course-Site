@@ -54,20 +54,45 @@ class Regrade_request(db.Model):
     approved = db.Column(db.Boolean, default = False)
     
 
+
+class Feedback(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    instructor_id = db.Column(db.Integer, db.ForeignKey('Person.id'), nullable=False)
+    f1 = db.Column(db.String(200), unique=False, nullable=True)
+    f2 = db.Column(db.String(200), unique=False, nullable=True)
+    f3 = db.Column(db.String(200), unique=False, nullable=True)
+    f4 = db.Column(db.String(200), unique=False, nullable=True)
+
+
+
 @app.route('/register', methods = ['GET', 'POST'])
 def register():
     if request.method=='GET':
         return render_template('register.html')
     else:
         user_name = request.form['Username']
+        person = Person.query.filter_by(username = user_name).first()
+        if person:
+            flash('Username Already Exist. Try again!', 'Error')
+            return render_template('register.html')
+
         email = request.form['Email']
+        person = Person.query.filter_by(email = email).first()
+        if person:
+            flash('Email Already Exist. Try again!', 'Error')
+            return render_template('register.html')
+        if request.form['Password'] != request.form['confirmPassword']:
+            flash('Please confirm your password matches. Try again!', 'Error')
+            return render_template('register.html')
+        
         hashed_password = bcrypt.generate_password_hash(request.form['Password']).decode('utf-8')
         userType = request.form['userType']
+        print(type(userType))
         reg_details =(user_name,
                       email,
                       hashed_password, userType)
         add_users(reg_details)
-        flash('registration successful! Please login now:')
+        flash('Registration successful! Please login now:')
         return redirect(url_for('login'))
 
 
@@ -115,24 +140,11 @@ def regrade_instructor():
 
 @app.route('/assignments/instructor')
 def assignments_instructor():
+   
     return render_template('assignment.html')
 
 @app.route('/A1_grades/assignments/instructor/')
 def instructor_A1_grades():
-
-    # To add new grade into Grades db 
-    # grade = Grade(
-    #     assignment_id=1,
-    #     person_id=3,
-    #     result=60
-    # )
-    # db.session.add(grade)
-    # db.session.commit()
-
-    # To delete grades from Grade db by id 
-    # grade = Grade.query.get(7)
-    # db.session.delete(grade)
-    # db.session.commit()
 
     assignment = Assignment.query.get(1)
     total_A1 = assignment.total
@@ -147,6 +159,7 @@ def instructor_A1_grades():
 @app.route('/A2_grades/assignments/instructor/')
 def instructor_A2_grades():
 
+    
     assignment = Assignment.query.get(2)
     total_A2 = assignment.total
     all_grades = Grade.query.filter_by(assignment_id=2).all()
@@ -156,6 +169,19 @@ def instructor_A2_grades():
     grades_names = zip(all_grades, usernames)
 
     return render_template('instructor_A2_grades.html', grades_names=grades_names, total=total_A2)
+
+@app.route('/A3_grades/assignments/instructor/')
+def instructor_A3_grades():
+
+    assignment = Assignment.query.get(3)
+    total_A3 = assignment.total
+    all_grades = Grade.query.filter_by(assignment_id=3).all()
+    all_person_ids = [grade.person_id for grade in all_grades]
+    persons = Person.query.filter(Person.id.in_(all_person_ids)).all()
+    usernames = [person.username for person in persons]
+    grades_names = zip(all_grades, usernames)
+
+    return render_template('instructor_A3_grades.html', grades_names=grades_names, total=total_A3)
 
 @app.route('/update_gradeA1', methods=['POST'])
 def update_grade_A1():
@@ -175,6 +201,18 @@ def update_grade_A2():
     db.session.commit()
     return redirect(url_for('instructor_A2_grades'))
 
+@app.route('/update_gradeA3', methods=['POST'])
+def update_grade_A3():
+    grade_id = request.form['grade_id']
+    new_grade = request.form['new_grade']
+    grade = Grade.query.get(grade_id) 
+    grade.result = new_grade
+    db.session.commit()
+    return redirect(url_for('instructor_A3_grades'))
+
+
+
+
 
 @app.route('/feedback/student', methods = ['GET', 'POST'])
 def feedback_student():
@@ -183,17 +221,22 @@ def feedback_student():
         f2 = request.form['f2']
         f3 = request.form['f3']
         f4 = request.form['f4']
+        instructor_id = request.form['instructor']
         
-        
-        flash('Feedback successfully submitted! ')
-        return redirect(url_for('login'))
+        newFeedback = Feedback(instructor_id = instructor_id, f1 = f1, f2 = f2, f3 = f3, f4 = f4)
+        db.session.add(newFeedback)
+        db.session.commit()
+        flash('Feedback successfully submitted!')
+        return redirect(url_for('feedback_student'))
     else:
-        return render_template('feedbackStudent.html')
+        person = Person.query.filter_by(userType = 'Instructor').all()
+        return render_template('feedbackStudent.html', instructors = person)
 
 
 @app.route('/feedback/instructor')
 def feedback_instructor():
-    return render_template('feedbackInstructor.html')
+    feedbacks = Feedback.query.filter_by(instructor_id = session['person_id']).all()
+    return render_template('feedbackInstructor.html', feedbacks = feedbacks)
 
 
 def add_users(reg_details):
@@ -206,6 +249,30 @@ def add_users(reg_details):
 @app.route('/home')
 def home():
     return render_template('index.html')
+
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
+
+
+@app.route('/labs')
+def labs():
+    return render_template('labs.html')
+
+
+@app.route('/resources')
+def resources():
+    return render_template('resources.html')
+
+
+@app.route('/lectures')
+def lectures():
+    return render_template('lecture.html')
+
+
+@app.route('/courseTeam')
+def courseTeam():
+    return render_template('courseTeam.html')
 
 
 
